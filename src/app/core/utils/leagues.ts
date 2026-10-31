@@ -1,11 +1,9 @@
-// Competiciones habilitadas en el backend (src/utils/leagueWhitelist.ts).
-// Si en el backend cambia la whitelist, hay que actualizar esta lista.
 
 export interface League {
   id: number;
   name: string;
   country: string;
-  flag: string; // emoji
+  flag: string; 
 }
 
 export const LEAGUES: League[] = [
@@ -28,7 +26,7 @@ export function leagueOrder(id: number): number {
   return i === -1 ? 999 : i;
 }
 
-/** Logo oficial de la liga (CDN público de API-Football). */
+
 export function leagueLogo(id: number): string {
   return `https://media.api-sports.io/football/leagues/${id}.png`;
 }
