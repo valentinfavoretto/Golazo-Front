@@ -5,18 +5,14 @@ import { environment } from '../../../environments/environment';
 import { FavoriteTeam, ItemResponse, User } from '../models/models';
 import { AuthService } from './auth.service';
 
-/**
- * Favoritos del usuario. El estado vive en el usuario de AuthService:
- * cada vez que el backend responde con el usuario actualizado, lo guardamos
- * ahí y las estrellas de toda la app se actualizan solas (computed).
- */
+
 @Injectable({ providedIn: 'root' })
 export class FavoritesService {
   private readonly http = inject(HttpClient);
   private readonly auth = inject(AuthService);
   private readonly base = `${environment.apiUrl}/users/favorites`;
 
-  /** ids de partidos favoritos (en /me vienen populados, en otras respuestas como ids) */
+  
   readonly matchIds = computed(() => {
     const list = this.auth.user()?.favoriteMatches ?? [];
     return new Set(list.map((m) => (typeof m === 'string' ? m : m._id)));
@@ -33,7 +29,7 @@ export class FavoritesService {
     return this.teamIds().has(teamId);
   }
 
-  // ── Partidos ───────────────────────────────────────────────────────────────
+
 
   addMatch(matchId: string): Observable<ItemResponse<User>> {
     return this.http
@@ -51,7 +47,7 @@ export class FavoritesService {
     return this.isMatchFavorite(matchId) ? this.removeMatch(matchId) : this.addMatch(matchId);
   }
 
-  // ── Equipos ────────────────────────────────────────────────────────────────
+ 
 
   addTeam(teamId: number): Observable<ItemResponse<User>> {
     return this.http
