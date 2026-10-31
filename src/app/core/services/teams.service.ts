@@ -4,12 +4,12 @@ import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ListResponse, TeamSearchResult } from '../models/models';
 
-/** Endpoint /api/teams/search */
+
 @Injectable({ providedIn: 'root' })
 export class TeamsService {
   private readonly http = inject(HttpClient);
 
-  /** GET /teams/search?name=river  (mínimo 3 letras) */
+  
   search(name: string): Observable<TeamSearchResult[]> {
     const params = new HttpParams().set('name', name);
     return this.http
