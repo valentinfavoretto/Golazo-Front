@@ -25,14 +25,14 @@ export class AdminComponent implements OnInit {
   readonly tab = signal<AdminTab>('users');
   readonly myUsername = computed(() => this.auth.user()?.username ?? '');
 
-  // ── Usuarios ───────────────────────────────────────────────────────────────
+  
   readonly users = signal<User[]>([]);
   readonly usersLoading = signal(false);
   readonly usersError = signal('');
   readonly usersInfo = signal('');
   userSearch = '';
 
-  // ── Partidos ───────────────────────────────────────────────────────────────
+  
   readonly matches = signal<Match[]>([]);
   readonly matchesLoaded = signal(false);
   readonly matchesLoading = signal(false);
@@ -78,7 +78,7 @@ export class AdminComponent implements OnInit {
     if (tab === 'matches' && !this.matchesLoaded()) this.loadMatches();
   }
 
-  // ── Usuarios: acciones ─────────────────────────────────────────────────────
+ 
 
   loadUsers(): void {
     this.usersLoading.set(true);
@@ -158,7 +158,7 @@ export class AdminComponent implements OnInit {
     this.users.update((list) => list.map((u) => (u._id === updated._id ? { ...u, ...updated } : u)));
   }
 
-  // ── Partidos: acciones ─────────────────────────────────────────────────────
+
 
   loadMatches(): void {
     this.matchesLoading.set(true);
