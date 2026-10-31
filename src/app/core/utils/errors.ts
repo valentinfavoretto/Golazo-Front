@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-/** Saca un mensaje legible de cualquier error HTTP del backend. */
 export function errorMessage(err: unknown): string {
   if (err instanceof HttpErrorResponse) {
     const msg = (err.error as { message?: string } | null)?.message;
