@@ -1,6 +1,3 @@
-/* ════════════════════════════════════════════════════════════════════════════
-   GOLAZO · estilos globales (look inspirado en sitios de resultados deportivos)
-   ════════════════════════════════════════════════════════════════════════════ */
 
 :root {
   --bg: #0b2a1a;
@@ -45,7 +42,6 @@ button { font-family: inherit; }
 .spacer { flex: 1; }
 .pad { padding: 14px 16px; }
 
-/* ── Estructura ───────────────────────────────────────────────────────────── */
 
 .topbar {
   background: #07200f;
@@ -104,7 +100,6 @@ button { font-family: inherit; }
   padding: 24px 16px 32px;
 }
 
-/* ── Sidebar ──────────────────────────────────────────────────────────────── */
 
 .sidebar { position: sticky; top: 70px; }
 .side-title {
@@ -127,7 +122,6 @@ button { font-family: inherit; }
 .side-link.active { background: var(--card-2); color: var(--accent); }
 .side-logo { width: 22px; height: 22px; object-fit: contain; }
 
-/* ── Tarjetas ─────────────────────────────────────────────────────────────── */
 
 .card {
   background: var(--card);
@@ -150,7 +144,6 @@ button { font-family: inherit; }
 .state.error { color: #ffb3b3; border-color: #6b2a2a; background: #2a1414; }
 .state p { margin: 0 0 10px; }
 
-/* ── Navegación de día / ronda ───────────────────────────────────────────── */
 
 .day-card { padding: 0; }
 .day-nav {
@@ -208,7 +201,6 @@ button { font-family: inherit; }
 .chip.active { background: var(--accent); color: #0b2a1a; border-color: var(--accent); }
 .chip:disabled { opacity: 0.5; cursor: default; }
 
-/* ── Bloques por competición ─────────────────────────────────────────────── */
 
 .league-card { padding: 0; }
 .league-head {
@@ -237,7 +229,6 @@ button { font-family: inherit; }
 .logo { width: 22px; height: 22px; object-fit: contain; flex: none; }
 .logo-xl { width: 64px; height: 64px; object-fit: contain; }
 
-/* ── Fila de partido ──────────────────────────────────────────────────────── */
 
 .match-row {
   display: grid;
@@ -280,7 +271,6 @@ button { font-family: inherit; }
 .star:hover { color: #ffd54a; }
 .star.on { color: #ffd54a; }
 
-/* ── Botones / formularios ───────────────────────────────────────────────── */
 
 .btn {
   display: inline-block;
@@ -344,7 +334,6 @@ button { font-family: inherit; }
 .badge.ok { background: #12351f; color: var(--ok); border-color: #1f6b3a; }
 .badge.bad { background: #3a1818; color: var(--bad); border-color: #6b2a2a; }
 
-/* ── Tabla de posiciones y tablas de datos ───────────────────────────────── */
 
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; }
@@ -389,7 +378,6 @@ span.rank.zone-none:empty { background: var(--line); }
 
 .pager { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 12px; color: var(--muted); }
 
-/* ── Cabecera de liga / perfil ───────────────────────────────────────────── */
 
 .league-header { display: flex; align-items: center; gap: 16px; padding: 14px 16px; }
 .league-header h1 { font-size: 22px; }
@@ -404,7 +392,6 @@ span.rank.zone-none:empty { background: var(--line); }
   font-size: 26px; font-weight: 900;
 }
 
-/* ── Detalle de partido ───────────────────────────────────────────────────── */
 
 .back-link { font-weight: 700; }
 
@@ -432,8 +419,6 @@ span.rank.zone-none:empty { background: var(--line); }
 .admin-box { border-color: #6b5b1f; }
 .admin-form { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-top: 10px; }
 .admin-form label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 700; }
-
-/* ── Equipos / favoritos / predicciones ──────────────────────────────────── */
 
 .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
 .team-card { padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
@@ -467,7 +452,6 @@ span.rank.zone-none:empty { background: var(--line); }
 .data-list dt { color: var(--muted); }
 .data-list dd { margin: 0; font-weight: 700; }
 
-/* ── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; padding: 10px; }
