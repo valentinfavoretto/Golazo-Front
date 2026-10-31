@@ -41,7 +41,7 @@ export class RegisterComponent {
     });
   }
 
-  // Mismas reglas que el backend (user.controller.ts / user.model.ts)
+  
   private validate(): string {
     const u = this.username.trim();
     if (!u || !this.email.trim() || !this.password) return 'Completá todos los campos.';
