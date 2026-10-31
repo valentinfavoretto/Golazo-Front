@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { adminGuard, authGuard } from './core/guards/auth.guard';
 
-// Cada página se carga "lazy" (solo cuando se visita): en el build genera
-// archivos chunk-[hash].js separados dentro de dist/.
 export const routes: Routes = [
   {
     path: '',
