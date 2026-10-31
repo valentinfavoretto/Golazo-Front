@@ -1,0 +1,184 @@
+@if (loading()) {
+  <div class="state">Cargando partido…</div>
+} @else if (error()) {
+  <div class="state error">
+    <p>{{ error() }}</p>
+    <a routerLink="/" class="btn btn-outline btn-sm">Volver a los partidos</a>
+  </div>
+} @else {
+ @if (match(); as m) {
+  <a routerLink="/" class="back-link">‹ Volver</a>
+
+  <!-- Cabecera -->
+  <section class="card detail-head">
+    <div class="dh-comp">
+      <img appImgFallback class="logo" [src]="m.competitionLogo" [alt]="m.competition" />
+      <a [routerLink]="['/liga', m.competitionId]">{{ m.competition }}</a>
+      @if (m.round) {
+        <span class="muted">· {{ roundLabel(m.round) }}</span>
+      }
+    </div>
+
+    <div class="dh-main">
+      <div class="dh-team">
+        <img appImgFallback class="logo-xl" [src]="m.homeLogo" [alt]="m.homeTeam" />
+        <span>{{ m.homeTeam }}</span>
+      </div>
+
+      <div class="dh-score">
+        <div class="big">
+          @if (hasScore()) {
+            {{ m.homeScore }} <span class="dash">–</span> {{ m.awayScore }}
+          } @else {
+            <span class="dash">vs</span>
+          }
+        </div>
+        <div class="dh-status" [class.live]="m.status === 'live'">{{ m | matchStatus }}</div>
+        @if (m.homeScoreHT !== null && m.awayScoreHT !== null) {
+          <div class="muted small">Entretiempo: {{ m.homeScoreHT }} – {{ m.awayScoreHT }}</div>
+        }
+      </div>
+
+      <div class="dh-team">
+        <img appImgFallback class="logo-xl" [src]="m.awayLogo" [alt]="m.awayTeam" />
+        <span>{{ m.awayTeam }}</span>
+      </div>
+    </div>
+
+    <ul class="dh-info">
+      <li>🗓 {{ m.date | date: "EEEE d 'de' MMMM, HH:mm" }} hs</li>
+      @if (m.venue) {
+        <li>🏟 {{ m.venue }}</li>
+      }
+      @if (m.referee) {
+        <li>🧑‍⚖️ {{ m.referee }}</li>
+      }
+    </ul>
+
+    @if (auth.isLoggedIn()) {
+      <div class="dh-actions">
+        <button type="button" class="btn btn-outline btn-sm" (click)="toggleFavorite()">
+          {{ isFavorite() ? '★ En favoritos (quitar)' : '☆ Agregar a favoritos' }}
+        </button>
+      </div>
+    }
+  </section>
+
+  <!-- Eventos -->
+  <section class="card pad">
+    <h2 class="card-title">Eventos del partido</h2>
+    @if (events().length === 0) {
+      <p class="muted">Todavía no hay eventos (goles, tarjetas, cambios) para este partido.</p>
+    } @else {
+      <ul class="events">
+        @for (e of events(); track $index) {
+          <li class="event" [class.away]="!isHomeEvent(e)">
+            <span class="ev-min">{{ e.time }}'</span>
+            <span class="ev-icon">{{ eventIcon(e) }}</span>
+            <span class="ev-text">
+              <b>{{ e.player }}</b>
+              <small>{{ eventLabel(e) }}</small>
+            </span>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  <!-- Predicción -->
+  <section class="card pad">
+    <h2 class="card-title">Mi predicción</h2>
+
+    @if (!auth.isLoggedIn()) {
+      <p class="muted">
+        <a routerLink="/login" [queryParams]="{ returnUrl: '/partido/' + m._id }">Iniciá sesión</a>
+        para pronosticar el resultado de este partido.
+      </p>
+    } @else if (m.status === 'scheduled') {
+      @if (myPrediction(); as p) {
+        <p>Tu pronóstico actual: <b>{{ p.homeScore }} – {{ p.awayScore }}</b></p>
+      }
+      <form class="pred-form" (ngSubmit)="savePrediction()">
+        <span class="pred-team">{{ m.homeTeam }}</span>
+        <input type="number" min="0" step="1" class="input num" name="predHome" [(ngModel)]="predHome" />
+        <span class="dash">–</span>
+        <input type="number" min="0" step="1" class="input num" name="predAway" [(ngModel)]="predAway" />
+        <span class="pred-team">{{ m.awayTeam }}</span>
+        <button type="submit" class="btn btn-primary btn-sm" [disabled]="predSaving()">
+          {{ myPrediction() ? 'Actualizar' : 'Guardar' }}
+        </button>
+      </form>
+      @if (predMessage()) {
+        <p class="msg ok">{{ predMessage() }}</p>
+      }
+      @if (predError()) {
+        <p class="msg err">{{ predError() }}</p>
+      }
+    } @else {
+      @if (myPrediction(); as p) {
+        <p>
+          Tu pronóstico fue <b>{{ p.homeScore }} – {{ p.awayScore }}</b>.
+          @switch (predictionResult()) {
+            @case ('correct') {
+              <span class="badge ok">¡Acertaste! ✔</span>
+            }
+            @case ('incorrect') {
+              <span class="badge bad">No acertaste ✘</span>
+            }
+            @default {
+              <span class="badge">Pendiente de resultado</span>
+            }
+          }
+        </p>
+      } @else {
+        <p class="muted">Este partido ya empezó: solo se puede pronosticar antes del inicio.</p>
+      }
+    }
+  </section>
+
+  <!-- Panel de administrador -->
+  @if (auth.isAdmin()) {
+    <section class="card pad admin-box">
+      <h2 class="card-title">Administración del partido</h2>
+      <p class="muted small">
+        Corrige el resultado manualmente. Ojo: si el partido sigue vivo o reciente, la próxima consulta
+        a API-Football puede volver a pisar estos valores.
+      </p>
+
+      <form class="admin-form" (ngSubmit)="saveAdminChanges()">
+        <label>
+          Goles local
+          <input type="number" min="0" step="1" class="input num" name="editHome" [(ngModel)]="editHome" />
+        </label>
+        <label>
+          Goles visitante
+          <input type="number" min="0" step="1" class="input num" name="editAway" [(ngModel)]="editAway" />
+        </label>
+        <label>
+          Estado
+          <select class="select" name="editStatus" [(ngModel)]="editStatus">
+            @for (o of statusOptions; track o.value) {
+              <option [value]="o.value">{{ o.label }}</option>
+            }
+          </select>
+        </label>
+        @if (editStatus === 'live') {
+          <label>
+            Minuto
+            <input type="number" min="0" step="1" class="input num" name="editElapsed" [(ngModel)]="editElapsed" />
+          </label>
+        }
+        <button type="submit" class="btn btn-primary btn-sm" [disabled]="adminSaving()">Guardar cambios</button>
+        <button type="button" class="btn btn-danger btn-sm" (click)="deleteMatch()">Eliminar partido</button>
+      </form>
+
+      @if (adminMessage()) {
+        <p class="msg ok">{{ adminMessage() }}</p>
+      }
+      @if (adminError()) {
+        <p class="msg err">{{ adminError() }}</p>
+      }
+    </section>
+  }
+}
+}

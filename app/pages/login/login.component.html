@@ -1,0 +1,33 @@
+<section class="card auth-card">
+  <h1 class="card-title big-title">Ingresar</h1>
+
+  <form (ngSubmit)="submit()" class="form-stack">
+    <label>
+      Email
+      <input type="email" class="input" name="email" [(ngModel)]="email" autocomplete="email" required />
+    </label>
+    <label>
+      Contraseña
+      <input
+        type="password"
+        class="input"
+        name="password"
+        [(ngModel)]="password"
+        autocomplete="current-password"
+        required
+      />
+    </label>
+
+    @if (error()) {
+      <p class="msg err">{{ error() }}</p>
+    }
+
+    <button type="submit" class="btn btn-primary" [disabled]="loading()">
+      {{ loading() ? 'Ingresando…' : 'Ingresar' }}
+    </button>
+  </form>
+
+  <p class="muted small center">
+    ¿No tenés cuenta? <a routerLink="/registro">Crear cuenta</a>
+  </p>
+</section>
