@@ -7,7 +7,6 @@ import { errorMessage } from '../../core/utils/errors';
 import { ImgFallbackDirective } from '../directives/img-fallback.directive';
 import { MatchStatusPipe } from '../pipes/match-status.pipe';
 
-/** Una fila de partido: estado · local · resultado · visitante · ★ */
 @Component({
   selector: 'app-match-row',
   imports: [MatchStatusPipe, ImgFallbackDirective],
@@ -15,7 +14,7 @@ import { MatchStatusPipe } from '../pipes/match-status.pipe';
 })
 export class MatchRowComponent {
   readonly match = input.required<MatchRowData>();
-  /** Mostrar "dd/MM HH:mm" en vez de solo la hora (para fixtures). */
+  
   readonly showDate = input(false);
   readonly showFavorite = input(true);
 
