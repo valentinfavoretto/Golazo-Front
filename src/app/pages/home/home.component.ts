@@ -19,7 +19,7 @@ interface LeagueGroup {
   matches: Match[];
 }
 
-const REFRESH_MS = 2 * 60 * 1000; // refresco automático solo si hay partidos en vivo
+const REFRESH_MS = 2 * 60 * 1000; 
 
 @Component({
   selector: 'app-home',
@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
 
   readonly isLoggedIn = this.auth.isLoggedIn;
 
-  /** -1 = ayer, 0 = hoy, 1 = mañana (el backend solo permite esos tres días) */
+  
   readonly offset = signal(0);
   readonly tab = signal<Tab>('all');
   readonly onlyFavorites = signal(false);
@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit {
     );
   });
 
-  /** Partidos agrupados por competición (en el mismo orden que el menú lateral). */
+  
   readonly groups = computed<LeagueGroup[]>(() => {
     const map = new Map<number, LeagueGroup>();
     for (const m of this.filtered()) {
@@ -133,7 +133,7 @@ export class HomeComponent implements OnInit {
 
     request$.subscribe({
       next: (list) => {
-        if (seq !== this.requestSeq) return; // llegó una respuesta vieja
+        if (seq !== this.requestSeq) return; 
         this.dayMatches.set(list);
         this.loading.set(false);
       },
