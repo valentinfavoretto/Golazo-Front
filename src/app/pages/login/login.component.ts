@@ -38,7 +38,7 @@ export class LoginComponent {
     });
   }
 
-  /** Solo se acepta volver a rutas internas de la app. */
+  
   private safeReturnUrl(): string {
     const url = this.route.snapshot.queryParamMap.get('returnUrl');
     return url && url.startsWith('/') && !url.startsWith('//') ? url : '/';
