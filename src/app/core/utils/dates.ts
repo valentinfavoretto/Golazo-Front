@@ -1,5 +1,3 @@
-// El backend trabaja con fechas en UTC (YYYY-MM-DD) y solo permite
-// consultar ayer, hoy y mañana. Estas funciones usan el mismo criterio.
 
 export function utcDateString(offsetDays = 0): string {
   const d = new Date();
@@ -7,7 +5,7 @@ export function utcDateString(offsetDays = 0): string {
   return d.toISOString().split('T')[0];
 }
 
-/** "lun 26/10" a partir de 'YYYY-MM-DD' (interpretado en UTC). */
+
 export function shortDayLabel(dateStr: string): string {
   const d = new Date(`${dateStr}T12:00:00Z`);
   const txt = new Intl.DateTimeFormat('es-AR', {
@@ -19,7 +17,7 @@ export function shortDayLabel(dateStr: string): string {
   return txt.replace('.', '');
 }
 
-/** Traduce el nombre de ronda de API-Football. */
+
 export function roundLabel(round: string): string {
   if (!round) return '';
   const map: Record<string, string> = {
