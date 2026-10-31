@@ -49,7 +49,7 @@ export class ProfileComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    // /users/me trae los partidos favoritos con sus datos (populate)
+    
     this.auth.fetchMe().subscribe({
       next: (user) => {
         this.favMatches.set(
