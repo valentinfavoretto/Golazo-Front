@@ -11,7 +11,7 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 })
 export class AppComponent {
   constructor() {
-    // Si quedó un token guardado, recupera al usuario (/users/me) al abrir la app.
+    
     inject(AuthService).ensureUser().subscribe();
   }
 }
