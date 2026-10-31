@@ -6,11 +6,7 @@ import { AuthResponse, ItemResponse, MessageResponse, User } from '../models/mod
 
 const TOKEN_KEY = 'football_token';
 
-/**
- * Maneja la sesión: guarda el token JWT en localStorage (el servidor es
- * stateless, así que el cliente tiene que mandar el token en cada petición)
- * y mantiene el usuario actual en una signal.
- */
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
@@ -24,7 +20,6 @@ export class AuthService {
 
   private pending$?: Observable<User | null>;
 
-  // ── Acciones ───────────────────────────────────────────────────────────────
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http
@@ -38,7 +33,7 @@ export class AuthService {
       .pipe(tap((r) => this.startSession(r)));
   }
 
-  /** Invalida el token en el servidor (blacklist) y limpia la sesión local. */
+ 
   logout(): Observable<unknown> {
     return this.http.post<MessageResponse>(`${this.base}/logout`, {}).pipe(
       catchError(() => of(null)),
@@ -46,10 +41,7 @@ export class AuthService {
     );
   }
 
-  /**
-   * Devuelve el usuario logueado. Si hay token pero todavía no se cargó el
-   * usuario (por ejemplo, después de recargar la página), lo pide a /users/me.
-   */
+
   ensureUser(): Observable<User | null> {
     const current = this.user();
     if (current) return of(current);
@@ -70,7 +62,7 @@ export class AuthService {
     return this.pending$;
   }
 
-  /** Vuelve a pedir /me (trae favoritos de partidos con sus datos). */
+ 
   fetchMe(): Observable<User> {
     return this.http.get<ItemResponse<User>>(`${this.base}/me`).pipe(
       map((r) => r.data),
@@ -88,11 +80,11 @@ export class AuthService {
     try {
       localStorage.removeItem(TOKEN_KEY);
     } catch {
-      /* sin storage disponible */
+     
     }
   }
 
-  // ── Internos ───────────────────────────────────────────────────────────────
+
 
   private startSession(r: AuthResponse): void {
     this.token.set(r.token);
@@ -100,7 +92,7 @@ export class AuthService {
     try {
       localStorage.setItem(TOKEN_KEY, r.token);
     } catch {
-      /* sin storage disponible */
+      
     }
   }
 
