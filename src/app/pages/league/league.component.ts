@@ -42,20 +42,20 @@ export class LeagueComponent {
   readonly loading = signal(false);
   readonly error = signal('');
 
-  // Posiciones
+ 
   readonly standings = signal<StandingRow[]>([]);
   readonly season = signal<number | null>(null);
 
-  // Partidos de hoy de la competición
+  
   readonly todayMatches = signal<Match[]>([]);
 
-  // Fixture
+ 
   readonly fixtures = signal<Fixture[]>([]);
   readonly selectedRound = signal('');
 
   private loaded = { standings: false, today: false, fixture: false };
 
-  /** Rondas del fixture, ordenadas por la fecha de su primer partido. */
+ 
   readonly rounds = computed(() => {
     const firstDate = new Map<string, number>();
     for (const f of this.fixtures()) {
@@ -74,7 +74,7 @@ export class LeagueComponent {
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
   );
 
-  /** Referencias de colores de la tabla (clasificación, descenso, etc.). */
+ 
   readonly zones = computed<Zone[]>(() => {
     const seen = new Map<string, Zone>();
     for (const row of this.standings()) {
@@ -117,7 +117,7 @@ export class LeagueComponent {
     this.selectTab(this.tab());
   }
 
-  // ── Carga de datos ─────────────────────────────────────────────────────────
+ 
 
   private loadStandings(): void {
     const id = this.leagueId();
@@ -176,7 +176,7 @@ export class LeagueComponent {
     });
   }
 
-  /** La ronda "actual": la primera que todavía tiene partidos sin jugar. */
+ 
   private pickCurrentRound(): string {
     const rounds = this.rounds();
     if (rounds.length === 0) return '';
@@ -189,7 +189,7 @@ export class LeagueComponent {
     return rounds[rounds.length - 1];
   }
 
-  // ── Fixture: navegación entre rondas ───────────────────────────────────────
+
 
   goRound(delta: number): void {
     const idx = this.roundIndex() + delta;
@@ -201,7 +201,7 @@ export class LeagueComponent {
     this.selectedRound.set((event.target as HTMLSelectElement).value);
   }
 
-  // ── Tabla de posiciones ────────────────────────────────────────────────────
+ 
 
   zoneClass(description: string | null): string {
     const d = (description ?? '').toLowerCase();
