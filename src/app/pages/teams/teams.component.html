@@ -1,0 +1,59 @@
+<section class="card pad">
+  <h1 class="card-title big-title">Buscar equipos</h1>
+  <p class="muted">Buscá un club o selección por nombre y agregalo a tus favoritos.</p>
+
+  <form class="search-form" (ngSubmit)="search()">
+    <input
+      type="search"
+      class="input grow"
+      name="query"
+      placeholder="Ej: river, boca, barcelona…"
+      [(ngModel)]="query"
+      autocomplete="off"
+    />
+    <button type="submit" class="btn btn-primary" [disabled]="loading()">Buscar</button>
+  </form>
+
+  @if (error()) {
+    <p class="msg err">{{ error() }}</p>
+  }
+</section>
+
+@if (loading()) {
+  <div class="state">Buscando…</div>
+} @else if (searched() && results().length === 0) {
+  <div class="state">No se encontraron equipos con ese nombre.</div>
+} @else {
+  <div class="team-grid">
+    @for (t of results(); track t.id) {
+      <article class="card team-card">
+        <img appImgFallback class="logo-xl" [src]="t.logo" [alt]="t.name" loading="lazy" />
+        <h3>{{ t.name }}</h3>
+        <p class="muted small">
+          {{ t.country }}
+          @if (t.founded) {
+            · Fundado en {{ t.founded }}
+          }
+        </p>
+        @if (t.venue) {
+          <p class="muted small">🏟 {{ t.venue }}{{ t.city ? ', ' + t.city : '' }}</p>
+        }
+
+        @if (auth.isLoggedIn()) {
+          <button
+            type="button"
+            class="btn btn-sm"
+            [class.btn-primary]="!isFavorite(t.id)"
+            [class.btn-outline]="isFavorite(t.id)"
+            [disabled]="busyTeamId() === t.id"
+            (click)="toggleFavorite(t.id)"
+          >
+            {{ isFavorite(t.id) ? '★ En favoritos (quitar)' : '☆ Agregar a favoritos' }}
+          </button>
+        } @else {
+          <a routerLink="/login" class="btn btn-outline btn-sm">Ingresá para guardar favoritos</a>
+        }
+      </article>
+    }
+  </div>
+}

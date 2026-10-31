@@ -1,0 +1,136 @@
+<section class="card profile-head">
+  <div class="avatar">{{ (auth.user()?.username ?? '?').charAt(0).toUpperCase() }}</div>
+  <div>
+    <h1>{{ auth.user()?.username }}</h1>
+    <p class="muted">
+      {{ auth.user()?.email }}
+      @if (auth.isAdmin()) {
+        <span class="badge">ADMIN</span>
+      }
+    </p>
+  </div>
+</section>
+
+<div class="tabs">
+  <button type="button" class="tab" [class.active]="tab() === 'favorites'" (click)="selectTab('favorites')">
+    FAVORITOS
+  </button>
+  <button type="button" class="tab" [class.active]="tab() === 'predictions'" (click)="selectTab('predictions')">
+    MIS PREDICCIONES
+  </button>
+  <button type="button" class="tab" [class.active]="tab() === 'account'" (click)="selectTab('account')">
+    CUENTA
+  </button>
+</div>
+
+@switch (tab()) {
+  @case ('favorites') {
+    @if (loading()) {
+      <div class="state">Cargando favoritos…</div>
+    } @else if (error()) {
+      <div class="state error">{{ error() }}</div>
+    } @else {
+      <section class="card pad">
+        <h2 class="card-title">Equipos favoritos</h2>
+        @if (favTeams().length === 0) {
+          <p class="muted">
+            Todavía no agregaste equipos. <a routerLink="/equipos">Buscar equipos</a>
+          </p>
+        } @else {
+          <ul class="fav-teams">
+            @for (t of favTeams(); track t.teamId) {
+              <li>
+                <img appImgFallback class="logo" [src]="t.logo" [alt]="t.teamName" />
+                <span>{{ t.teamName }}</span>
+                <button type="button" class="btn btn-outline btn-sm" (click)="removeTeam(t.teamId)">Quitar</button>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <section class="card league-card">
+        <header class="league-head"><span>Partidos favoritos</span></header>
+        @if (favMatches().length === 0) {
+          <p class="muted pad">
+            Todavía no marcaste partidos con la estrella ☆. Hacelo desde la lista de partidos.
+          </p>
+        } @else {
+          @for (m of favMatches(); track m._id) {
+            <div class="row-with-action">
+              <app-match-row [match]="m" [showDate]="true" [showFavorite]="false" />
+              <button type="button" class="btn btn-outline btn-sm" (click)="removeMatch(m._id)">Quitar</button>
+            </div>
+          }
+        }
+      </section>
+    }
+  }
+
+  @case ('predictions') {
+    @if (predictionsLoading()) {
+      <div class="state">Cargando predicciones…</div>
+    } @else if (predictionsError()) {
+      <div class="state error">{{ predictionsError() }}</div>
+    } @else if (predictions().length === 0) {
+      <div class="state">
+        Todavía no hiciste ninguna predicción. Entrá a un partido que no haya empezado y pronosticá el resultado.
+      </div>
+    } @else {
+      <section class="stats-row">
+        <div class="card stat"><b>{{ stats().total }}</b><span>Predicciones</span></div>
+        <div class="card stat ok"><b>{{ stats().correct }}</b><span>Acertadas</span></div>
+        <div class="card stat bad"><b>{{ stats().incorrect }}</b><span>Falladas</span></div>
+        <div class="card stat"><b>{{ stats().pending }}</b><span>Pendientes</span></div>
+        <div class="card stat">
+          <b>{{ stats().accuracy === null ? '–' : stats().accuracy + '%' }}</b><span>Efectividad</span>
+        </div>
+      </section>
+
+      <section class="card league-card">
+        @for (p of predictions(); track p.matchId) {
+          <div class="pred-item">
+            @if (p.match; as m) {
+              <a class="pred-link" [routerLink]="['/partido', m._id]">
+                <app-match-row [match]="m" [showDate]="true" [showFavorite]="false" />
+              </a>
+            } @else {
+              <p class="muted pad">Partido no disponible (fue eliminado).</p>
+            }
+            <div class="pred-meta">
+              <span>Tu pronóstico: <b>{{ p.myPrediction.homeScore }} – {{ p.myPrediction.awayScore }}</b></span>
+              @switch (p.result) {
+                @case ('correct') {
+                  <span class="badge ok">Acertaste ✔</span>
+                }
+                @case ('incorrect') {
+                  <span class="badge bad">Fallaste ✘</span>
+                }
+                @default {
+                  <span class="badge">Pendiente</span>
+                }
+              }
+            </div>
+          </div>
+        }
+      </section>
+    }
+  }
+
+  @case ('account') {
+    <section class="card pad">
+      <h2 class="card-title">Datos de la cuenta</h2>
+      <dl class="data-list">
+        <dt>Usuario</dt>
+        <dd>{{ auth.user()?.username }}</dd>
+        <dt>Email</dt>
+        <dd>{{ auth.user()?.email }}</dd>
+        <dt>Rol</dt>
+        <dd>{{ auth.isAdmin() ? 'Administrador' : 'Usuario' }}</dd>
+        <dt>Miembro desde</dt>
+        <dd>{{ auth.user()?.createdAt | date: 'dd/MM/yyyy' }}</dd>
+      </dl>
+      <button type="button" class="btn btn-danger" (click)="logout()">Cerrar sesión</button>
+    </section>
+  }
+}
