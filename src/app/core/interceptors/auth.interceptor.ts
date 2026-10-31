@@ -5,12 +5,6 @@ import { catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../services/auth.service';
 
-/**
- * Interceptor funcional:
- *  1) agrega "Authorization: Bearer <token>" a las peticiones a nuestra API
- *  2) si el servidor responde 401 estando logueados (token vencido, cerrado
- *     por logout o usuario eliminado), limpia la sesión y manda al login.
- */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
   const router = inject(Router);
