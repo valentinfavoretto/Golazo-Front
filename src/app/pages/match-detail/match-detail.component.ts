@@ -59,14 +59,14 @@ export class MatchDetailComponent {
     return p.homeScore === m.homeScore && p.awayScore === m.awayScore ? 'correct' : 'incorrect';
   });
 
-  // ── Formulario de predicción (usuarios logueados) ──────────────────────────
+  
   predHome: number | null = null;
   predAway: number | null = null;
   readonly predSaving = signal(false);
   readonly predMessage = signal('');
   readonly predError = signal('');
 
-  // ── Formulario de administración (solo admin) ──────────────────────────────
+ 
   editHome: number | null = null;
   editAway: number | null = null;
   editStatus: MatchStatus = 'scheduled';
@@ -116,7 +116,7 @@ export class MatchDetailComponent {
     this.predAway = p ? p.awayScore : null;
   }
 
-  // ── Favoritos ──────────────────────────────────────────────────────────────
+
 
   toggleFavorite(): void {
     const m = this.match();
@@ -126,7 +126,7 @@ export class MatchDetailComponent {
     });
   }
 
-  // ── Predicción ─────────────────────────────────────────────────────────────
+ 
 
   savePrediction(): void {
     const m = this.match();
@@ -154,7 +154,7 @@ export class MatchDetailComponent {
     });
   }
 
-  // ── Administración ─────────────────────────────────────────────────────────
+ 
 
   saveAdminChanges(): void {
     const m = this.match();
@@ -200,7 +200,7 @@ export class MatchDetailComponent {
     });
   }
 
-  // ── Presentación de eventos ────────────────────────────────────────────────
+
 
   eventIcon(e: MatchEvent): string {
     if (e.type === 'Goal') return e.detail === 'Missed Penalty' ? '❌' : '⚽';
