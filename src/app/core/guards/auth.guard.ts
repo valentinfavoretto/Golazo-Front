@@ -3,7 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { map } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
-/** Solo usuarios logueados. Si no, va al login y vuelve a la página pedida. */
+
 export const authGuard: CanActivateFn = (_route, state) => {
   const auth = inject(AuthService);
   const router = inject(Router);
@@ -16,7 +16,7 @@ export const authGuard: CanActivateFn = (_route, state) => {
     );
 };
 
-/** Solo administradores. */
+
 export const adminGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
