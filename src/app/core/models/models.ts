@@ -1,6 +1,4 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// Modelos (interfaces TypeScript) que reflejan lo que devuelve el backend.
-// ─────────────────────────────────────────────────────────────────────────────
+
 
 export type MatchStatus = 'scheduled' | 'live' | 'finished' | 'postponed' | 'cancelled';
 export type UserRole = 'viewer' | 'admin';
@@ -9,11 +7,10 @@ export interface MatchEvent {
   time: number;
   team: string;
   player: string;
-  type: string;   // 'Goal' | 'Card' | 'subst' | 'Var'
-  detail: string; // 'Normal Goal', 'Yellow Card', ...
-}
+  type: string;   
+  detail: string; 
 
-/** Partido guardado en MongoDB (tiene _id). */
+
 export interface Match {
   _id: string;
   externalId: number;
@@ -40,10 +37,10 @@ export interface Match {
   round: string;
 }
 
-/** Partido del fixture de una liga: viene directo de API-Football, sin _id. */
+
 export type Fixture = Omit<Match, '_id'>;
 
-/** Lo mínimo que necesita la fila de partido para dibujarse. */
+
 export interface MatchRowData {
   _id?: string;
   homeTeam: string;
@@ -64,7 +61,7 @@ export interface FavoriteTeam {
   logo: string;
 }
 
-/** Partido favorito "populado" (lo devuelve GET /users/me). */
+
 export interface FavoriteMatch extends MatchRowData {
   _id: string;
   competition: string;
@@ -82,7 +79,7 @@ export interface User {
   username: string;
   email: string;
   role: UserRole;
-  // En /me vienen como objetos (populate); en el resto de respuestas, como ids.
+  
   favoriteMatches: Array<string | FavoriteMatch>;
   favoriteTeams: FavoriteTeam[];
   predictions: Prediction[];
@@ -127,7 +124,7 @@ export interface TeamSearchResult {
   city: string | null;
 }
 
-// ── Respuestas genéricas del backend ─────────────────────────────────────────
+
 export interface ListResponse<T> {
   ok: boolean;
   count: number;
